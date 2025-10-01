@@ -1,8 +1,8 @@
-import QRMode = require('./QRMode');
-import QRPolynomial = require('./QRPolynomial');
-import QRMath = require('./QRMath');
-import QRMaskPattern = require('./QRMaskPattern');
-import QRCode = require('./index');
+import QRMode from './QRMode'
+import QRPolynomial from './QRPolynomial'
+import QRMath from './QRMath'
+import QRMaskPattern from './QRMaskPattern'
+import QRCode from './index'
 
 const QRUtil = {
     PATTERN_POSITION_TABLE: [
@@ -45,71 +45,86 @@ const QRUtil = {
         [6, 28, 54, 80, 106, 132, 158],
         [6, 32, 58, 84, 110, 136, 162],
         [6, 26, 54, 82, 110, 138, 166],
-        [6, 30, 58, 86, 114, 142, 170],
+        [6, 30, 58, 86, 114, 142, 170]
     ],
 
-    G15: (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
-    G18: (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15:
+        (1 << 10) |
+        (1 << 8) |
+        (1 << 5) |
+        (1 << 4) |
+        (1 << 2) |
+        (1 << 1) |
+        (1 << 0),
+    G18:
+        (1 << 12) |
+        (1 << 11) |
+        (1 << 10) |
+        (1 << 9) |
+        (1 << 8) |
+        (1 << 5) |
+        (1 << 2) |
+        (1 << 0),
     G15_MASK: (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1),
 
     getBCHTypeInfo(data: number): number {
-        let d = data << 10;
+        let d = data << 10
         while (this.getBCHDigit(d) - this.getBCHDigit(this.G15) >= 0) {
-            d ^= this.G15 << (this.getBCHDigit(d) - this.getBCHDigit(this.G15));
+            d ^= this.G15 << (this.getBCHDigit(d) - this.getBCHDigit(this.G15))
         }
-        return ((data << 10) | d) ^ this.G15_MASK;
+        return ((data << 10) | d) ^ this.G15_MASK
     },
 
     getBCHTypeNumber(data: number): number {
-        let d = data << 12;
+        let d = data << 12
         while (this.getBCHDigit(d) - this.getBCHDigit(this.G18) >= 0) {
-            d ^= this.G18 << (this.getBCHDigit(d) - this.getBCHDigit(this.G18));
+            d ^= this.G18 << (this.getBCHDigit(d) - this.getBCHDigit(this.G18))
         }
-        return (data << 12) | d;
+        return (data << 12) | d
     },
 
     getBCHDigit(data: number): number {
-        let digit = 0;
+        let digit = 0
         while (data !== 0) {
-            digit++;
-            data >>>= 1;
+            digit++
+            data >>>= 1
         }
-        return digit;
+        return digit
     },
 
     getPatternPosition(typeNumber: number): number[] {
-        return this.PATTERN_POSITION_TABLE[typeNumber - 1];
+        return this.PATTERN_POSITION_TABLE[typeNumber - 1]
     },
 
     getMask(maskPattern: number, i: number, j: number): boolean {
         switch (maskPattern) {
             case QRMaskPattern.PATTERN000:
-                return (i + j) % 2 === 0;
+                return (i + j) % 2 === 0
             case QRMaskPattern.PATTERN001:
-                return i % 2 === 0;
+                return i % 2 === 0
             case QRMaskPattern.PATTERN010:
-                return j % 3 === 0;
+                return j % 3 === 0
             case QRMaskPattern.PATTERN011:
-                return (i + j) % 3 === 0;
+                return (i + j) % 3 === 0
             case QRMaskPattern.PATTERN100:
-                return (Math.floor(i / 2) + Math.floor(j / 3)) % 2 === 0;
+                return (Math.floor(i / 2) + Math.floor(j / 3)) % 2 === 0
             case QRMaskPattern.PATTERN101:
-                return ((i * j) % 2) + ((i * j) % 3) === 0;
+                return ((i * j) % 2) + ((i * j) % 3) === 0
             case QRMaskPattern.PATTERN110:
-                return (((i * j) % 2) + ((i * j) % 3)) % 2 === 0;
+                return (((i * j) % 2) + ((i * j) % 3)) % 2 === 0
             case QRMaskPattern.PATTERN111:
-                return (((i * j) % 3) + ((i + j) % 2)) % 2 === 0;
+                return (((i * j) % 3) + ((i + j) % 2)) % 2 === 0
             default:
-                throw new Error(`bad maskPattern:${maskPattern}`);
+                throw new Error(`bad maskPattern:${maskPattern}`)
         }
     },
 
     getErrorCorrectPolynomial(errorCorrectLength: number): QRPolynomial {
-        let a = new QRPolynomial([1], 0);
+        let a = new QRPolynomial([1], 0)
         for (let i = 0; i < errorCorrectLength; i++) {
-            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0));
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0))
         }
-        return a;
+        return a
     },
 
     getLengthInBits(mode: number, type: number): number {
@@ -117,77 +132,77 @@ const QRUtil = {
             // 1 - 9
             switch (mode) {
                 case QRMode.MODE_NUMBER:
-                    return 10;
+                    return 10
                 case QRMode.MODE_ALPHA_NUM:
-                    return 9;
+                    return 9
                 case QRMode.MODE_8BIT_BYTE:
-                    return 8;
+                    return 8
                 case QRMode.MODE_KANJI:
-                    return 8;
+                    return 8
                 default:
-                    throw new Error(`mode:${mode}`);
+                    throw new Error(`mode:${mode}`)
             }
         } else if (type < 27) {
             // 10 - 26
             switch (mode) {
                 case QRMode.MODE_NUMBER:
-                    return 12;
+                    return 12
                 case QRMode.MODE_ALPHA_NUM:
-                    return 11;
+                    return 11
                 case QRMode.MODE_8BIT_BYTE:
-                    return 16;
+                    return 16
                 case QRMode.MODE_KANJI:
-                    return 10;
+                    return 10
                 default:
-                    throw new Error(`mode:${mode}`);
+                    throw new Error(`mode:${mode}`)
             }
         } else if (type < 41) {
             // 27 - 40
             switch (mode) {
                 case QRMode.MODE_NUMBER:
-                    return 14;
+                    return 14
                 case QRMode.MODE_ALPHA_NUM:
-                    return 13;
+                    return 13
                 case QRMode.MODE_8BIT_BYTE:
-                    return 16;
+                    return 16
                 case QRMode.MODE_KANJI:
-                    return 12;
+                    return 12
                 default:
-                    throw new Error(`mode:${mode}`);
+                    throw new Error(`mode:${mode}`)
             }
         } else {
-            throw new Error(`type:${type}`);
+            throw new Error(`type:${type}`)
         }
     },
 
     getLostPoint(qrCode: QRCode): number {
-        const moduleCount = qrCode.getModuleCount();
-        let lostPoint = 0;
+        const moduleCount = qrCode.getModuleCount()
+        let lostPoint = 0
 
         // LEVEL 1
         for (let row = 0; row < moduleCount; row++) {
             for (let col = 0; col < moduleCount; col++) {
-                let sameCount = 0;
-                const dark = qrCode.isDark(row, col);
+                let sameCount = 0
+                const dark = qrCode.isDark(row, col)
 
                 for (let r = -1; r <= 1; r++) {
                     if (row + r < 0 || moduleCount <= row + r) {
-                        continue;
+                        continue
                     }
                     for (let c = -1; c <= 1; c++) {
                         if (col + c < 0 || moduleCount <= col + c) {
-                            continue;
+                            continue
                         }
                         if (r === 0 && c === 0) {
-                            continue;
+                            continue
                         }
                         if (dark === qrCode.isDark(row + r, col + c)) {
-                            sameCount++;
+                            sameCount++
                         }
                     }
                 }
                 if (sameCount > 5) {
-                    lostPoint += 3 + sameCount - 5;
+                    lostPoint += 3 + sameCount - 5
                 }
             }
         }
@@ -195,13 +210,13 @@ const QRUtil = {
         // LEVEL 2
         for (let row = 0; row < moduleCount - 1; row++) {
             for (let col = 0; col < moduleCount - 1; col++) {
-                let count = 0;
-                if (qrCode.isDark(row, col)) count++;
-                if (qrCode.isDark(row + 1, col)) count++;
-                if (qrCode.isDark(row, col + 1)) count++;
-                if (qrCode.isDark(row + 1, col + 1)) count++;
+                let count = 0
+                if (qrCode.isDark(row, col)) count++
+                if (qrCode.isDark(row + 1, col)) count++
+                if (qrCode.isDark(row, col + 1)) count++
+                if (qrCode.isDark(row + 1, col + 1)) count++
                 if (count === 0 || count === 4) {
-                    lostPoint += 3;
+                    lostPoint += 3
                 }
             }
         }
@@ -218,7 +233,7 @@ const QRUtil = {
                     !qrCode.isDark(row, col + 5) &&
                     qrCode.isDark(row, col + 6)
                 ) {
-                    lostPoint += 40;
+                    lostPoint += 40
                 }
             }
         }
@@ -234,26 +249,27 @@ const QRUtil = {
                     !qrCode.isDark(row + 5, col) &&
                     qrCode.isDark(row + 6, col)
                 ) {
-                    lostPoint += 40;
+                    lostPoint += 40
                 }
             }
         }
 
         // LEVEL 4
-        let darkCount = 0;
+        let darkCount = 0
         for (let col = 0; col < moduleCount; col++) {
             for (let row = 0; row < moduleCount; row++) {
                 if (qrCode.isDark(row, col)) {
-                    darkCount++;
+                    darkCount++
                 }
             }
         }
 
-        const ratio = Math.abs((100 * darkCount) / moduleCount / moduleCount - 50) / 5;
-        lostPoint += ratio * 10;
+        const ratio =
+            Math.abs((100 * darkCount) / moduleCount / moduleCount - 50) / 5
+        lostPoint += ratio * 10
 
-        return lostPoint;
-    },
-};
+        return lostPoint
+    }
+}
 
-export = QRUtil;
+export = QRUtil

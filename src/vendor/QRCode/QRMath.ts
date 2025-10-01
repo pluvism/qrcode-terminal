@@ -4,24 +4,24 @@ const QRMath = {
 
     glog(n: number): number {
         if (n < 1) {
-            throw new Error(`glog(${n})`);
+            throw new Error(`glog(${n})`)
         }
-        return this.LOG_TABLE[n];
+        return this.LOG_TABLE[n]
     },
 
     gexp(n: number): number {
         while (n < 0) {
-            n += 255;
+            n += 255
         }
         while (n >= 256) {
-            n -= 255;
+            n -= 255
         }
-        return this.EXP_TABLE[n];
-    },
-};
+        return this.EXP_TABLE[n]
+    }
+}
 
 for (let i = 0; i < 8; i++) {
-    QRMath.EXP_TABLE[i] = 1 << i;
+    QRMath.EXP_TABLE[i] = 1 << i
 }
 
 for (let i = 8; i < 256; i++) {
@@ -29,11 +29,11 @@ for (let i = 8; i < 256; i++) {
         QRMath.EXP_TABLE[i - 4] ^
         QRMath.EXP_TABLE[i - 5] ^
         QRMath.EXP_TABLE[i - 6] ^
-        QRMath.EXP_TABLE[i - 8];
+        QRMath.EXP_TABLE[i - 8]
 }
 
 for (let i = 0; i < 255; i++) {
-    QRMath.LOG_TABLE[QRMath.EXP_TABLE[i]] = i;
+    QRMath.LOG_TABLE[QRMath.EXP_TABLE[i]] = i
 }
 
-export = QRMath;
+export = QRMath

@@ -1,4 +1,4 @@
-# QRCode Terminal Edition [![Build Status][travis-ci-img]][travis-ci-url]
+# QRCode Terminal Edition
 
 > Going where no QRCode has gone before.
 
@@ -14,7 +14,7 @@ Can be installed with:
 
 and used:
 
-    var qrcode = require('qrcode-terminal');
+    var qrcode from 'qrcode-terminal';
 
 ## Usage
 
@@ -23,7 +23,7 @@ To display some data to the terminal just call:
     qrcode.generate('This will be a QRCode, eh!');
 
 You can even specify the error level (default is 'L'):
-    
+
     qrcode.setErrorLevel('Q');
     qrcode.generate('This will be a QRCode with error level Q!');
 
@@ -79,4 +79,3 @@ To run tests run `npm test`
 [travis-ci-url]: https://travis-ci.org/gtanner/qrcode-terminal
 [basic-example-img]: https://raw.github.com/gtanner/qrcode-terminal/master/example/basic.png
 [node-qrcode-url]: https://github.com/soldair/node-qrcode
-

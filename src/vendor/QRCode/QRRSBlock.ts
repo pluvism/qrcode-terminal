@@ -1,12 +1,12 @@
-import QRErrorCorrectLevel = require('./QRErrorCorrectLevel');
+import QRErrorCorrectLevel from './QRErrorCorrectLevel'
 
 class QRRSBlock {
-    totalCount: number;
-    dataCount: number;
+    totalCount: number
+    dataCount: number
 
     constructor(totalCount: number, dataCount: number) {
-        this.totalCount = totalCount;
-        this.dataCount = dataCount;
+        this.totalCount = totalCount
+        this.dataCount = dataCount
     }
 
     static RS_BLOCK_TABLE: number[][] = [
@@ -213,46 +213,54 @@ class QRRSBlock {
         [19, 148, 118, 6, 149, 119],
         [18, 75, 47, 31, 76, 48],
         [34, 54, 24, 34, 55, 25],
-        [20, 45, 15, 61, 46, 16],
-    ];
+        [20, 45, 15, 61, 46, 16]
+    ]
 
-    static getRSBlocks(typeNumber: number, errorCorrectLevel: number): QRRSBlock[] {
-        const rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+    static getRSBlocks(
+        typeNumber: number,
+        errorCorrectLevel: number
+    ): QRRSBlock[] {
+        const rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel)
 
         if (typeof rsBlock === 'undefined') {
-            throw new Error(`bad rs block @ typeNumber:${typeNumber}/errorCorrectLevel:${errorCorrectLevel}`);
+            throw new Error(
+                `bad rs block @ typeNumber:${typeNumber}/errorCorrectLevel:${errorCorrectLevel}`
+            )
         }
 
-        const length = rsBlock.length / 3;
-        const list: QRRSBlock[] = [];
+        const length = rsBlock.length / 3
+        const list: QRRSBlock[] = []
 
         for (let i = 0; i < length; i++) {
-            const count = rsBlock[i * 3 + 0];
-            const totalCount = rsBlock[i * 3 + 1];
-            const dataCount = rsBlock[i * 3 + 2];
+            const count = rsBlock[i * 3 + 0]
+            const totalCount = rsBlock[i * 3 + 1]
+            const dataCount = rsBlock[i * 3 + 2]
 
             for (let j = 0; j < count; j++) {
-                list.push(new QRRSBlock(totalCount, dataCount));
+                list.push(new QRRSBlock(totalCount, dataCount))
             }
         }
 
-        return list;
+        return list
     }
 
-    static getRsBlockTable(typeNumber: number, errorCorrectLevel: number): number[] | undefined {
+    static getRsBlockTable(
+        typeNumber: number,
+        errorCorrectLevel: number
+    ): number[] | undefined {
         switch (errorCorrectLevel) {
             case QRErrorCorrectLevel.L:
-                return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+                return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0]
             case QRErrorCorrectLevel.M:
-                return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+                return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1]
             case QRErrorCorrectLevel.Q:
-                return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+                return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2]
             case QRErrorCorrectLevel.H:
-                return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+                return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3]
             default:
-                return undefined;
+                return undefined
         }
     }
 }
 
-export = QRRSBlock;
+export = QRRSBlock
