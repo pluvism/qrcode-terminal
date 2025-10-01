@@ -1,2 +1,2 @@
-import qrcode from '../lib/main'
+import * as qrcode from '../src/main'
 qrcode.generate('this is the bomb')

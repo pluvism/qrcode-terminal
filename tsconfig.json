@@ -9,6 +9,6 @@
         "forceConsistentCasingInFileNames": true,
         "declaration": true
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*.ts", "example/**/*.ts"],
     "exclude": ["node_modules", "lib", "test"]
 }

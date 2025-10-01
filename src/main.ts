@@ -32,6 +32,7 @@ function fill(length: number, value: boolean): boolean[] {
     return arr
 }
 
+
 export function generate(
     input: string,
     opts?: GenerateOptions | GenerateCallback,
@@ -119,3 +120,4 @@ export function generate(
 export function setErrorLevel(errorLevel: 'L' | 'M' | 'Q' | 'H'): void {
     error = QRErrorCorrectLevel[errorLevel] || error
 }
+
