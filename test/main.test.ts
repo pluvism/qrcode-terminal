@@ -7,7 +7,7 @@ describe('QR Code Generation', () => {
     qrcode.generate('test', (result) => {
       expect(result).to.be.a('string');
       // Default QR code uses block elements
-      expect(result).to.include('█');
+      expect(result).to.include('\u001b[40m  \u001b[0m');
       done();
     });
   });
@@ -42,6 +42,20 @@ describe('QR Code Generation', () => {
         expect(result1).to.equal(result2);
         done();
       });
+    });
+  });
+
+  it('should handle empty string input', (done) => {
+    qrcode.generate('', (result) => {
+      expect(result).to.be.a('string');
+      done();
+    });
+  });
+
+  it('should handle input with special characters', (done) => {
+    qrcode.generate('!@#$%^&*()_+', (result) => {
+      expect(result).to.be.a('string');
+      done();
     });
   });
 });

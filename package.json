@@ -25,14 +25,10 @@
     "qrcode-terminal": "dist/cli.js"
   },
   "preferGlobal": false,
-  "dependencies": {
-    "qrcode": "^1.5.0"
-  },
   "devDependencies": {
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.1.0",
     "@types/node": "^17.0.21",
-    "@types/qrcode": "^1.4.2",
     "chai": "^4.3.6",
     "mocha": "^9.2.2",
     "ts-node": "^10.7.0",
